@@ -1,7 +1,7 @@
 import { ethers } from "hardhat";
 
-const AUCTION_ADDRESS = "YOUR_AUCTION_CONTRACT_ADDRESS";
-const TOKEN_ADDRESS = "YOUR_TOKEN_CONTRACT_ADDRESS";
+const AUCTION_ADDRESS = "";
+const TOKEN_ADDRESS = "";
 
 async function main() {
   const [seller, buyer1, buyer2] = await ethers.getSigners();
