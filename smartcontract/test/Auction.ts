@@ -28,6 +28,7 @@ describe("Auction", function () {
     const startPrice = hre.ethers.parseEther("10");
     const duration = 3600;
   
+    await token.connect(seller).approve(token.target, amount)
     await auction.connect(seller).startAuction(amount, startPrice, duration);
   
     expect(await auction.seller()).to.equal(seller.address);
