@@ -8,11 +8,13 @@ describe("Auction", function () {
   
     const Token = await hre.ethers.getContractFactory("Token");
     const token = await Token.deploy();
-    await token.waitForDeployment();
   
     const Auction = await hre.ethers.getContractFactory("Auction");
     const auction = await Auction.connect(seller).deploy(token.target);
-    await auction.waitForDeployment();
+    const deploymentTx = auction.deploymentTransaction();
+    if (deploymentTx) {
+      await deploymentTx.wait();
+    }
   
     const tokensToSell = hre.ethers.parseEther("100");
     await token.connect(deployer).transfer(seller.address, tokensToSell);
@@ -28,7 +30,7 @@ describe("Auction", function () {
     const startPrice = hre.ethers.parseEther("10");
     const duration = 3600;
   
-    await token.connect(seller).approve(token.target, amount)
+    await token.connect(seller).approve(auction.target, amount);
     await auction.connect(seller).startAuction(amount, startPrice, duration);
   
     expect(await auction.seller()).to.equal(seller.address);
@@ -85,5 +87,4 @@ describe("Auction", function () {
     expect(sellerBalanceAfter).to.be.gt(sellerBalanceBefore);
     expect(buyerBalanceAfter).to.equal(buyerBalanceBefore + amount);
   });
-
 });
